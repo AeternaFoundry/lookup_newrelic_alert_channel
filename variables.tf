@@ -11,21 +11,6 @@ EOT
     name       = string
     account_id = optional(number)
   }))
-  validation {
-    condition = alltrue([
-      for k, v in var.alert_channel_lookup : (
-        alltrue([for item in v.config : (item.auth_type == null || (contains(["BASIC"], item.auth_type)))])
-      )
-    ])
-    error_message = "must be one of: \"BASIC\""
-  }
-  validation {
-    condition = alltrue([
-      for k, v in var.alert_channel_lookup : (
-        alltrue([for item in v.config : (item.region == null || (contains(["US", "EU", "JP"], item.region)))])
-      )
-    ])
-    error_message = "must be one of: \"US\", \"EU\", \"JP\""
-  }
+  # Note: 2 additional provider-side validators are enforced at apply time but not mirrored as validation{} blocks here (bespoke or non-mechanically-translatable).
 }
 
